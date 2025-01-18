@@ -1,0 +1,80 @@
+[gd_scene load_steps=11 format=3 uid="uid://c7nabe1y1wsju"]
+
+[ext_resource type="Script" path="res://components/CharacterMovement.gd" id="1_2mc13"]
+[ext_resource type="Script" path="res://components/InputHandler.gd" id="2_7st26"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ki3do"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_1mqy3"]
+sky_material = SubResource("ProceduralSkyMaterial_ki3do")
+
+[sub_resource type="Environment" id="Environment_wbvq5"]
+background_mode = 2
+sky = SubResource("Sky_1mqy3")
+tonemap_mode = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_7w81x"]
+size = Vector3(20, 0.5, 1)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_6xyjc"]
+points = PackedVector3Array(-10, -0.25, -0.5, -10, 0.25, -0.5, 10, -0.25, -0.5, -10, -0.25, 0.5, -10, 0.25, 0.5, 10, 0.25, -0.5, 10, -0.25, 0.5, 10, 0.25, 0.5)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_t8ryi"]
+radius = 0.3
+height = 1.75
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_56g5v"]
+radius = 0.3
+height = 1.75
+
+[sub_resource type="BoxMesh" id="BoxMesh_2gse5"]
+size = Vector3(0.3, 0.1, 0.3)
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_wbvq5")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_7w81x")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("ConvexPolygonShape3D_6xyjc")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)
+shape = SubResource("CapsuleShape3D_t8ryi")
+
+[node name="ModelPivot" type="Node3D" parent="Player"]
+
+[node name="Capsule" type="MeshInstance3D" parent="Player/ModelPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)
+mesh = SubResource("CapsuleMesh_56g5v")
+skeleton = NodePath("../..")
+
+[node name="Head" type="MeshInstance3D" parent="Player/ModelPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.5, 0)
+mesh = SubResource("BoxMesh_2gse5")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2)
+current = true
+fov = 120.0
+
+[node name="CharacterMovement" type="Node" parent="Player"]
+script = ExtResource("1_2mc13")
+
+[node name="InputHandler" type="Node" parent="Player" node_paths=PackedStringArray("movement_component")]
+script = ExtResource("2_7st26")
+movement_component = NodePath("../CharacterMovement")
