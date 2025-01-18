@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c7nabe1y1wsju"]
+[gd_scene load_steps=15 format=3 uid="uid://c7nabe1y1wsju"]
 
 [ext_resource type="Script" path="res://components/CharacterMovement.gd" id="1_2mc13"]
 [ext_resource type="Script" path="res://components/InputHandler.gd" id="2_7st26"]
@@ -15,7 +15,28 @@ background_mode = 2
 sky = SubResource("Sky_1mqy3")
 tonemap_mode = 2
 
+[sub_resource type="Gradient" id="Gradient_7ll5d"]
+offsets = PackedFloat32Array(0.0238095, 1)
+colors = PackedColorArray(0.237253, 0.41, 0.0861, 1, 0.29, 0.1595, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_qvgav"]
+noise_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_w3b4w"]
+width = 1024
+height = 128
+generate_mipmaps = false
+color_ramp = SubResource("Gradient_7ll5d")
+noise = SubResource("FastNoiseLite_qvgav")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2svvn"]
+shading_mode = 2
+albedo_texture = SubResource("NoiseTexture2D_w3b4w")
+texture_filter = 0
+texture_repeat = false
+
 [sub_resource type="BoxMesh" id="BoxMesh_7w81x"]
+material = SubResource("StandardMaterial3D_2svvn")
 size = Vector3(20, 0.5, 1)
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_6xyjc"]
@@ -60,11 +81,13 @@ shape = SubResource("CapsuleShape3D_t8ryi")
 
 [node name="Capsule" type="MeshInstance3D" parent="Player/ModelPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)
+cast_shadow = 0
 mesh = SubResource("CapsuleMesh_56g5v")
 skeleton = NodePath("../..")
 
 [node name="Head" type="MeshInstance3D" parent="Player/ModelPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, 1.5, 0)
+cast_shadow = 0
 mesh = SubResource("BoxMesh_2gse5")
 
 [node name="Camera3D" type="Camera3D" parent="Player"]
