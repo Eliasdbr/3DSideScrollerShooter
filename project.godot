@@ -15,6 +15,10 @@ run/main_scene="res://scenes/world.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
+[autoload]
+
+DebugUI="*res://scripts/debug.gd"
+
 [display]
 
 window/size/viewport_width=320
@@ -27,6 +31,10 @@ window/stretch/scale_mode="integer"
 [filesystem]
 
 import/blender/enabled=false
+
+[global_group]
+
+DebugItems="List of labels for debug data"
 
 [input]
 

@@ -55,7 +55,7 @@ func shoot() -> void:
 
 
 func _ready():
-	pass
+	DebugUI.addValue("XVelocity", vel.x)
 
 func _physics_process(delta):
 	# Gravity
@@ -63,6 +63,8 @@ func _physics_process(delta):
 		vel = Vector3(vel.x, 0, vel.z)
 	else:
 		vel += parent.get_gravity()
+	
+	DebugUI.updateValue("XVelocity", vel.x)
 		
 	parent.velocity = vel * delta
 	parent.move_and_slide()

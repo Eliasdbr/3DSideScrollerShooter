@@ -101,3 +101,18 @@ script = ExtResource("1_2mc13")
 [node name="InputHandler" type="Node" parent="Player" node_paths=PackedStringArray("movement_component")]
 script = ExtResource("2_7st26")
 movement_component = NodePath("../CharacterMovement")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DebugInfo" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DebugItems" type="VBoxContainer" parent="CanvasLayer/DebugInfo" groups=["DebugItems"]]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
