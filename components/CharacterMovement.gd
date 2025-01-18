@@ -1,6 +1,7 @@
 class_name CharacterMovement
 extends Node
 
+# MARK: variables
 
 @onready var parent: CharacterBody3D = get_parent()
 
@@ -35,6 +36,7 @@ func move(direction: Vector2) -> void:
 			vel.x = 0
 	
 	else:
+		DebugUI.updateValue("XDir", direction.x)
 		# Accelerates
 		if abs(vel.x) < max_speed:
 			if sign(direction.x) <= 0:
@@ -55,7 +57,8 @@ func shoot() -> void:
 
 
 func _ready():
-	DebugUI.addValue("XVelocity", vel.x)
+	DebugUI.addValue("XVel", vel.x)
+	DebugUI.addValue("XDir", 0)
 
 func _physics_process(delta):
 	# Gravity
@@ -64,7 +67,7 @@ func _physics_process(delta):
 	else:
 		vel += parent.get_gravity()
 	
-	DebugUI.updateValue("XVelocity", vel.x)
+	DebugUI.updateValue("XVel", vel.x)
 		
 	parent.velocity = vel * delta
 	parent.move_and_slide()
