@@ -20,3 +20,7 @@ func _physics_process(delta):
 	# Shoot Action
 	if Input.is_action_pressed("Shoot"):
 		movement_component.shoot()
+	
+	# Crouch action
+	if Input.is_action_just_pressed("Crouch"):
+		movement_component.crouch()

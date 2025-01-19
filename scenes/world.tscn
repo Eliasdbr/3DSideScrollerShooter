@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://c7nabe1y1wsju"]
+[gd_scene load_steps=17 format=3 uid="uid://c7nabe1y1wsju"]
 
 [ext_resource type="Script" path="res://components/CharacterMovement.gd" id="1_2mc13"]
 [ext_resource type="Script" path="res://components/InputHandler.gd" id="2_7st26"]
@@ -46,11 +46,21 @@ points = PackedVector3Array(-10, -0.25, -0.5, -10, 0.25, -0.5, 10, -0.25, -0.5, 
 radius = 0.3
 height = 1.75
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m38ch"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.498039)
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_56g5v"]
+material = SubResource("StandardMaterial3D_m38ch")
 radius = 0.3
 height = 1.75
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pa52y"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.498039)
+
 [sub_resource type="BoxMesh" id="BoxMesh_2gse5"]
+material = SubResource("StandardMaterial3D_pa52y")
 size = Vector3(0.3, 0.1, 0.3)
 
 [node name="World" type="Node3D"]
@@ -95,8 +105,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2)
 current = true
 fov = 120.0
 
-[node name="CharacterMovement" type="Node" parent="Player"]
+[node name="CharacterMovement" type="Node" parent="Player" node_paths=PackedStringArray("collision_shape", "model_pivot")]
 script = ExtResource("1_2mc13")
+collision_shape = NodePath("../CollisionShape3D")
+model_pivot = NodePath("../ModelPivot")
 
 [node name="InputHandler" type="Node" parent="Player" node_paths=PackedStringArray("movement_component")]
 script = ExtResource("2_7st26")

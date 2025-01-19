@@ -4,6 +4,8 @@ extends Node
 # MARK: variables
 
 @onready var parent: CharacterBody3D = get_parent()
+@export var collision_shape: CollisionShape3D
+@export var model_pivot: Node3D
 
 @export var acceleration: float = 24.0
 
@@ -13,9 +15,11 @@ extends Node
 
 @export var jumping_force: float = 240.0
 
+@export var collision_height: float = 1.75
+
 
 var vel: Vector3 = Vector3.ZERO
-
+var is_crouching: bool = false
 
 func aim(direction: Vector2) -> void:
 	pass
@@ -40,10 +44,17 @@ func move(direction: Vector2) -> void:
 			vel.x += direction.x * acceleration
 		else:
 			# Suddenly changes direction
-			vel.x += direction.x * acceleration * 2
+			if parent.is_on_floor():
+				vel.x += direction.x * acceleration * 2
+			else:
+				vel.x += direction.x * acceleration * 0.5
 	# Speed limit
-	if abs(vel.x) >= max_speed:
-		vel.x = max_speed * sign(vel.x)
+	var max_s = max_speed 
+	if is_crouching == true: 
+		max_s = max_speed*0.5
+	
+	if abs(vel.x) >= max_s:
+		vel.x = max_s * sign(vel.x)
 	
 
 func jump() -> void:
@@ -52,6 +63,19 @@ func jump() -> void:
 
 func shoot() -> void:
 	pass
+
+func crouch() -> void:
+	is_crouching = !is_crouching
+	
+	if collision_shape:
+		var coll_shape = collision_shape.shape as CapsuleShape3D
+		if is_crouching:
+			coll_shape.height = collision_height * 0.5
+			collision_shape.position.y = collision_height * 0.25
+		else:
+			coll_shape.height = collision_height
+			collision_shape.position.y = collision_height * 0.5
+
 
 
 func _ready():
