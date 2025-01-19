@@ -21,32 +21,30 @@ func aim(direction: Vector2) -> void:
 	pass
 
 func move(direction: Vector2) -> void:
-	if (
-		direction.length() == 0.0 
-		and abs(vel.x) > 0
-	):
-		# Movement damping
-		if parent.is_on_floor():
-			vel.x -= sign(vel.x) * damping
-		else:
-			# Less friction on air
-			vel.x -= sign(vel.x) * (damping * 0.1)
-		# Prevent drifting
-		if abs(vel.x) <= damping:
-			vel.x = 0
-	
-	else:
-		DebugUI.updateValue("XDir", direction.x)
-		# Accelerates
-		if abs(vel.x) < max_speed:
-			if sign(direction.x) <= 0:
-				vel.x += direction.x * acceleration
+	DebugUI.updateValue("XDir", direction.x)
+	if direction.x == 0.0:
+		if vel.x != 0:
+			# Movement damping
+			if parent.is_on_floor():
+				vel.x -= sign(vel.x) * damping
 			else:
-				# Suddenly changes direction
-				vel.x += direction.x * acceleration * 2
+				# Less friction on air
+				vel.x -= sign(vel.x) * (damping * 0.1)
+			# Prevent drifting
+			if abs(vel.x) <= damping:
+				vel.x = 0
+	else:
+		#if abs(vel.x) < max_speed:
+		# Accelerates
+		if sign(direction.x) == sign(vel.x):
+			vel.x += direction.x * acceleration
+		else:
+			# Suddenly changes direction
+			vel.x += direction.x * acceleration * 2
+	# Speed limit
+	if abs(vel.x) >= max_speed:
+		vel.x = max_speed * sign(vel.x)
 	
-	clamp(vel.x, -max_speed, max_speed)
-
 
 func jump() -> void:
 	if parent.is_on_floor():
@@ -66,7 +64,7 @@ func _physics_process(delta):
 		vel = Vector3(vel.x, 0, vel.z)
 	else:
 		vel += parent.get_gravity()
-	
+		
 	DebugUI.updateValue("XVel", vel.x)
 		
 	parent.velocity = vel * delta
